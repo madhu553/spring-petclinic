@@ -14,8 +14,9 @@ import java.util.Locale;
  * Configures internationalization (i18n) support for the application.
  *
  * <p>
- * Handles loading language-specific messages, tracking the user's language, and allowing
- * language changes via the URL parameter (e.g., <code>?lang=de</code>).
+ * Handles loading language-specific messages, tracking the user's language, and
+ * allowing language changes via the URL parameter (e.g.,
+ * <code>?lang=de</code>).
  * </p>
  *
  * @author Anuj Ashok Potdar
@@ -27,6 +28,7 @@ public class WebConfiguration implements WebMvcConfigurer {
 	/**
 	 * Uses session storage to remember the user’s language setting across requests.
 	 * Defaults to English if nothing is specified.
+	 * 
 	 * @return session-based {@link LocaleResolver}
 	 */
 	@Bean
@@ -39,6 +41,7 @@ public class WebConfiguration implements WebMvcConfigurer {
 	/**
 	 * Allows the app to switch languages using a URL parameter like
 	 * <code>?lang=es</code>.
+	 * 
 	 * @return a {@link LocaleChangeInterceptor} that handles the change
 	 */
 	@Bean
@@ -50,6 +53,7 @@ public class WebConfiguration implements WebMvcConfigurer {
 
 	/**
 	 * Registers the locale change interceptor so it can run on each request.
+	 * 
 	 * @param registry where interceptors are added
 	 */
 	@Override

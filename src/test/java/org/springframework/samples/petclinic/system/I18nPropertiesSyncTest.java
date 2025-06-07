@@ -16,9 +16,9 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * This test ensures that there are no hard-coded strings without internationalization in
- * any HTML files. Also ensures that a string is translated in every language to avoid
- * partial translations.
+ * This test ensures that there are no hard-coded strings without
+ * internationalization in any HTML files. Also ensures that a string is
+ * translated in every language to avoid partial translations.
  *
  * @author Anuj Ashok Potdar
  */
@@ -43,9 +43,8 @@ public class I18nPropertiesSyncTest {
 
 		try (Stream<Path> stream = Files.walk(root)) {
 			files = stream.filter(p -> p.toString().endsWith(".java") || p.toString().endsWith(".html"))
-				.filter(p -> !p.toString().contains("/test/"))
-				.filter(p -> !p.getFileName().toString().endsWith("Test.java"))
-				.toList();
+					.filter(p -> !p.toString().contains("/test/"))
+					.filter(p -> !p.getFileName().toString().endsWith("Test.java")).toList();
 		}
 
 		StringBuilder report = new StringBuilder();
@@ -65,13 +64,8 @@ public class I18nPropertiesSyncTest {
 					boolean isBracketOnly = BRACKET_ONLY.matcher(line).find();
 
 					if (hasLiteralText && !line.contains("#{") && !hasThTextAttribute && !isBracketOnly) {
-						report.append("HTML: ")
-							.append(file)
-							.append(" Line ")
-							.append(i + 1)
-							.append(": ")
-							.append(line)
-							.append("\n");
+						report.append("HTML: ").append(file).append(" Line ").append(i + 1).append(": ").append(line)
+								.append("\n");
 					}
 				}
 			}
@@ -87,8 +81,7 @@ public class I18nPropertiesSyncTest {
 		List<Path> propertyFiles;
 		try (Stream<Path> stream = Files.walk(Paths.get(I18N_DIR))) {
 			propertyFiles = stream.filter(p -> p.getFileName().toString().startsWith(BASE_NAME))
-				.filter(p -> p.getFileName().toString().endsWith(PROPERTIES))
-				.toList();
+					.filter(p -> p.getFileName().toString().endsWith(PROPERTIES)).toList();
 		}
 
 		Map<String, Properties> localeToProps = new HashMap<>();
