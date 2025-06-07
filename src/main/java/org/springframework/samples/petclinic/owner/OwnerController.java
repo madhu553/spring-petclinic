@@ -18,6 +18,8 @@ package org.springframework.samples.petclinic.owner;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -45,9 +47,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 class OwnerController {
+	private static final Logger logger = LoggerFactory.getLogger(OwnerController.class);
 
 	private static final String VIEWS_OWNER_CREATE_OR_UPDATE_FORM = "owners/createOrUpdateOwnerForm";
-
+	
 	private final OwnerRepository owners;
 
 	public OwnerController(OwnerRepository owners) {
@@ -56,6 +59,7 @@ class OwnerController {
 
 	@InitBinder
 	public void setAllowedFields(WebDataBinder dataBinder) {
+		logger.debug("Disallowing binding of the 'id' field.");
 		dataBinder.setDisallowedFields("id");
 	}
 
@@ -69,32 +73,39 @@ class OwnerController {
 
 	@GetMapping("/owners/new")
 	public String initCreationForm() {
+		logger.info("Initializing new Owner creation form.");
 		return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping("/owners/new")
 	public String processCreationForm(@Valid Owner owner, BindingResult result, RedirectAttributes redirectAttributes) {
 		if (result.hasErrors()) {
+			logger.warn("Validation errors during Owner creation: {}", result.getAllErrors());
 			redirectAttributes.addFlashAttribute("error", "There was an error in creating the owner.");
 			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 		}
 
 		this.owners.save(owner);
+		logger.info("New Owner saved with ID: {}", owner.getId());
 		redirectAttributes.addFlashAttribute("message", "New Owner Created");
 		return "redirect:/owners/" + owner.getId();
 	}
 
 	@GetMapping("/owners/find")
 	public String initFindForm() {
+		logger.info("Loading find owners form.");
 		return "owners/findOwners";
 	}
 
 	@GetMapping("/owners")
 	public String processFindForm(@RequestParam(defaultValue = "1") int page, Owner owner, BindingResult result,
 			Model model) {
+		logger.info("Processing owner search for last name: {}", owner.getLastName());
 		// allow parameterless GET request for /owners to return all records
 		if (owner.getLastName() == null) {
+			
 			owner.setLastName(""); // empty string signifies broadest possible search
+			logger.debug("No last name provided, using empty string for broadest search.");
 		}
 
 		// find owners by last name
